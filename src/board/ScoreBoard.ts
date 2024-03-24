@@ -1,7 +1,13 @@
-import { AddGameType, GameStatus, UpdateScoreType } from '../utils/types';
+import {
+  AddGameType,
+  GameStatus,
+  SummaryType,
+  UpdateScoreType,
+} from '../utils/types';
 import { Game } from '../model/Game';
 import { Team } from '../model/Team';
 import { error } from '../utils/errorDefinition';
+import { sleep } from '../utils/utility';
 
 class ScoreBoard implements ScoreBoard {
   private games: Game[];
@@ -11,6 +17,10 @@ class ScoreBoard implements ScoreBoard {
 
   private findGameById(gameId: number) {
     return this.games.find((game) => game.getGameId() === gameId);
+  }
+
+  private filterInProgressGames(status: GameStatus) {
+    return this.games.filter((game) => game.getGameStatus() === status);
   }
 
   private updateGameStatus(gameId: number, status: GameStatus) {
@@ -32,6 +42,10 @@ class ScoreBoard implements ScoreBoard {
     if (gameIfExist) {
       throw error.GAME_ID_IS_EXIST;
     }
+
+    // this is not ideal solution but in safer side
+    // the start time will not be the same for each game
+    sleep(50);
 
     const homeTeamDetails = new Team({ name: homeTeam });
     const awayTeamDetails = new Team({ name: awayTeam });
@@ -72,8 +86,36 @@ class ScoreBoard implements ScoreBoard {
       throw error.INVALID_ENTER_SCORE;
     }
     // Updating the score of game after most of validation
-    game.addGameScore(awayTeamScore, homeTeamScore);
+    game.addGameScore({ homeTeamScore, awayTeamScore });
+  }
+
+  getSummary(): SummaryType {
+    // filtering details which games are started
+    const inProgressMatches = this.filterInProgressGames(GameStatus.STARTED);
+
+    const sortBasedOnScore = inProgressMatches.sort((game1, game2) => {
+      if (game2.getTotalScore() === game1.getTotalScore()) {
+        // once we have same total score for two matches then we need to check
+        // from each team of the match who has same score and become tie of match
+        return game2.getStartTime().getTime() - game1.getStartTime().getTime();
+      }
+      return game2.getTotalScore() - game1.getTotalScore();
+    });
+    // try to make simple formate but we can enhance accordingly
+    return sortBasedOnScore.map((game) => {
+      return {
+        gameId: game.getGameId(),
+        homeTeam: game.getHomeTeamName(),
+        awayTeam: game.getAwayTeamName(),
+        homeTeamScore: game.getHomeTeamScore(),
+        awayTeamScore: game.getAwayTeamScore(),
+        gameStatus: game.getGameStatus(),
+        startTime: game.getStartTime(),
+        totalScore: game.getTotalScore(),
+      };
+    });
   }
 }
-
+// exporting type in case do we need to use while getting summery
+export { GameStatus, SummaryType };
 export default ScoreBoard;

@@ -1,4 +1,4 @@
-import { GameStatus } from '../utils/types';
+import { AddGameScoreType, GameStatus } from '../utils/types';
 import { Team } from './Team';
 
 export class Game {
@@ -8,6 +8,7 @@ export class Game {
   private awayTeamScore: number;
   private gameId: number;
   private gameStatus: GameStatus;
+  private startTime: Date;
 
   constructor(homeTeam: Team, awayTeam: Team, gameId: number) {
     this.homeTeam = homeTeam;
@@ -17,6 +18,7 @@ export class Game {
     this.homeTeamScore = 0;
     this.awayTeamScore = 0;
     this.gameStatus = GameStatus.NOT_STARTED;
+    this.startTime = new Date();
   }
 
   getGameId() {
@@ -50,8 +52,12 @@ export class Game {
     return this.gameStatus;
   }
 
-  addGameScore(homeTeamScore: number, awayTeamScore: number) {
+  addGameScore({ homeTeamScore, awayTeamScore }: AddGameScoreType) {
     this.homeTeamScore = this.homeTeamScore + homeTeamScore;
     this.awayTeamScore = this.awayTeamScore + awayTeamScore;
+  }
+
+  getStartTime() {
+    return this.startTime;
   }
 }

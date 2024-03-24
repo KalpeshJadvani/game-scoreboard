@@ -1,5 +1,7 @@
 export interface ScoreBoard {
   addGame(game: AddGameType): void;
+  updateScore(score: UpdateScoreType): void;
+  getSummary(): SummaryType;
 }
 
 export type TeamType = {
@@ -23,3 +25,19 @@ export type UpdateScoreType = {
   awayTeamScore: number;
   gameId: number;
 };
+
+export type AddGameScoreType = Pick<
+  UpdateScoreType,
+  'homeTeamScore' | 'awayTeamScore'
+>;
+
+export type SummaryType = {
+  homeTeam: string;
+  awayTeam: string;
+  homeTeamScore: number;
+  awayTeamScore: number;
+  totalScore: number;
+  gameId: number;
+  gameStatus: GameStatus;
+  startTime: Date;
+}[];

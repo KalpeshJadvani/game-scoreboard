@@ -39,9 +39,9 @@ describe('Game', () => {
     });
 
     it('should update the game score', () => {
-      game.addGameScore(2, 1);
+      game.addGameScore({ homeTeamScore: 2, awayTeamScore: 1 });
       expect(game.getTotalScore()).toBe(3);
-      game.addGameScore(1, 1);
+      game.addGameScore({ homeTeamScore: 1, awayTeamScore: 1 });
       expect(game.getTotalScore()).toBe(5);
     });
   });
