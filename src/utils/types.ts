@@ -17,3 +17,9 @@ export enum GameStatus {
   STARTED = 'STARTED',
   FINISHED = 'FINISHED',
 }
+
+export type UpdateScoreType = {
+  homeTeamScore: number;
+  awayTeamScore: number;
+  gameId: number;
+};

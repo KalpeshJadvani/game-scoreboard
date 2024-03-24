@@ -49,4 +49,9 @@ export class Game {
   getGameStatus() {
     return this.gameStatus;
   }
+
+  addGameScore(homeTeamScore: number, awayTeamScore: number) {
+    this.homeTeamScore = this.homeTeamScore + homeTeamScore;
+    this.awayTeamScore = this.awayTeamScore + awayTeamScore;
+  }
 }

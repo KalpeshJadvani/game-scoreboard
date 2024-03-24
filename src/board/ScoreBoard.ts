@@ -1,4 +1,4 @@
-import { AddGameType, GameStatus } from '../utils/types';
+import { AddGameType, GameStatus, UpdateScoreType } from '../utils/types';
 import { Game } from '../model/Game';
 import { Team } from '../model/Team';
 import { error } from '../utils/errorDefinition';
@@ -54,6 +54,25 @@ class ScoreBoard implements ScoreBoard {
       throw error.INVALID_GAME_ID;
     }
     return game.getGameStatus();
+  }
+
+  updateScore(score: UpdateScoreType) {
+    const { gameId, homeTeamScore, awayTeamScore } = score;
+    const game = this.findGameById(gameId);
+    if (!game) {
+      throw error.INVALID_GAME_ID;
+    }
+
+    const status = game.getGameStatus();
+    if (status === GameStatus.NOT_STARTED || status === GameStatus.FINISHED) {
+      throw error.UNABLE_TO_UPDATE_SCORE;
+    }
+    // allowing 0 score be because any of the team could has 0
+    if (awayTeamScore < 0 || homeTeamScore < 0) {
+      throw error.INVALID_ENTER_SCORE;
+    }
+    // Updating the score of game after most of validation
+    game.addGameScore(awayTeamScore, homeTeamScore);
   }
 }
 

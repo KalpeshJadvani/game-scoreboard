@@ -8,4 +8,8 @@ export const error = {
   INVALID_GAME_ID: new Error(
     'Failed to operation on game data ! the game id may provided wrong'
   ),
+  UNABLE_TO_UPDATE_SCORE: new Error(
+    'Sorry, not able to update the score due to game status is finished or not started'
+  ),
+  INVALID_ENTER_SCORE: new Error('Failed to update the score due to invalid'),
 };

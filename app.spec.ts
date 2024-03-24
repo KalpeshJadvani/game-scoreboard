@@ -37,4 +37,17 @@ describe('app', () => {
     expect(board.getGameStatus(0)).toBe(GameStatus.FINISHED);
     expect(board.getGameStatus(1)).toBe(GameStatus.FINISHED);
   });
+
+  it('should update the score of game with right game id', () => {
+    board.addGame({ gameId: 0, homeTeam: 'Mexico', awayTeam: 'Canada' });
+    board.addGame({ gameId: 1, homeTeam: 'Spain', awayTeam: 'Brazil' });
+
+    board.startGame(0);
+    board.startGame(1);
+    expect(board.getGameStatus(0)).toBe(GameStatus.STARTED);
+    expect(board.getGameStatus(1)).toBe(GameStatus.STARTED);
+
+    board.updateScore({ gameId: 1, homeTeamScore: 2, awayTeamScore: 1 });
+    board.updateScore({ gameId: 0, homeTeamScore: 0, awayTeamScore: 1 });
+  });
 });

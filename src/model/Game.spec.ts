@@ -37,5 +37,12 @@ describe('Game', () => {
       game.setGameStatus(GameStatus.FINISHED);
       expect(game.getGameStatus()).toBe(GameStatus.FINISHED);
     });
+
+    it('should update the game score', () => {
+      game.addGameScore(2, 1);
+      expect(game.getTotalScore()).toBe(3);
+      game.addGameScore(1, 1);
+      expect(game.getTotalScore()).toBe(5);
+    });
   });
 });
