@@ -11,3 +11,9 @@ export type AddGameType = {
   awayTeam: string;
   gameId: number;
 };
+
+export enum GameStatus {
+  NOT_STARTED = 'NOT_STARTED',
+  STARTED = 'STARTED',
+  FINISHED = 'FINISHED',
+}

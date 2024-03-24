@@ -1,3 +1,4 @@
+import { GameStatus } from '../utils/types';
 import { Game } from './Game';
 import { Team } from './Team';
 
@@ -21,6 +22,20 @@ describe('Game', () => {
 
     it('should calculate total score based on home and away team scores', () => {
       expect(game.getTotalScore()).toBe(0);
+    });
+
+    it('should get game status not started ', () => {
+      expect(game.getGameStatus()).toBe(GameStatus.NOT_STARTED);
+    });
+
+    it('should get game status started ', () => {
+      game.setGameStatus(GameStatus.STARTED);
+      expect(game.getGameStatus()).toBe(GameStatus.STARTED);
+    });
+
+    it('should get game status finished ', () => {
+      game.setGameStatus(GameStatus.FINISHED);
+      expect(game.getGameStatus()).toBe(GameStatus.FINISHED);
     });
   });
 });

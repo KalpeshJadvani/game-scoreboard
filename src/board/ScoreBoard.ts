@@ -1,4 +1,4 @@
-import { AddGameType } from '../utils/types';
+import { AddGameType, GameStatus } from '../utils/types';
 import { Game } from '../model/Game';
 import { Team } from '../model/Team';
 import { error } from '../utils/errorDefinition';
@@ -11,6 +11,15 @@ class ScoreBoard implements ScoreBoard {
 
   private findGameById(gameId: number) {
     return this.games.find((game) => game.getGameId() === gameId);
+  }
+
+  private updateGameStatus(gameId: number, status: GameStatus) {
+    const game = this.findGameById(gameId);
+    if (!game) {
+      throw error.INVALID_GAME_ID;
+    }
+
+    game.setGameStatus(status);
   }
 
   addGame({ gameId, homeTeam, awayTeam }: AddGameType) {
@@ -29,6 +38,22 @@ class ScoreBoard implements ScoreBoard {
     const game = new Game(homeTeamDetails, awayTeamDetails, gameId);
 
     this.games.push(game);
+  }
+
+  startGame(gameId: number) {
+    this.updateGameStatus(gameId, GameStatus.STARTED);
+  }
+
+  finishedGame(gameId: number) {
+    this.updateGameStatus(gameId, GameStatus.FINISHED);
+  }
+
+  getGameStatus(gameId: number) {
+    const game = this.findGameById(gameId);
+    if (!game) {
+      throw error.INVALID_GAME_ID;
+    }
+    return game.getGameStatus();
   }
 }
 
