@@ -2,16 +2,21 @@
   "name": "game-scoreboard",
   "version": "1.0.0",
   "description": "module take score of sport event and give summary",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "start:dev": "nodemon app.ts",
-    "start": "node app.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npm run build && nodemon dist/index.js",
+    "build": "npm run clean && tsc --build",
+    "clean": "tsc --build --clean",
+    "test": "jest"
   },
   "author": "Kalpesh Jadvani",
   "license": "ISC",
   "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "jest": "^29.7.0",
     "nodemon": "^3.1.0",
+    "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.3"
   }
