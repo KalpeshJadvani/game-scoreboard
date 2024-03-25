@@ -32,6 +32,15 @@ class ScoreBoard implements ScoreBoard {
     game.setGameStatus(status);
   }
 
+  /**
+   * Description placeholder
+   *
+   *  Add game method is adding a game along with ID
+   *
+   * @param {AddGameType} param.homeTeam string
+   * @param {AddGameType} param.awayTeam string
+   * @param {AddGameType} param.gameId number
+   */
   addGame({ gameId, homeTeam, awayTeam }: AddGameType) {
     if (!homeTeam || !awayTeam || gameId < 0 || gameId === undefined) {
       throw error.REQUIRED_TEAM_DATA;
@@ -43,8 +52,8 @@ class ScoreBoard implements ScoreBoard {
       throw error.GAME_ID_IS_EXIST;
     }
 
-    // this is not ideal solution but in safer side
-    // the start time will not be the same for each game
+    // This is not ideal solution but in safer side
+    // The start time should not be the same for each game while adding it.
     sleep(50);
 
     const homeTeamDetails = new Team({ name: homeTeam });
@@ -54,10 +63,24 @@ class ScoreBoard implements ScoreBoard {
     this.games.push(game);
   }
 
+  /**
+   * Description placeholder
+   * Any game can start by ID
+   * ID must be match otherwise throw error
+   *
+   * @param {number} gameId
+   */
   startGame(gameId: number) {
     this.updateGameStatus(gameId, GameStatus.STARTED);
   }
 
+  /**
+   * Description placeholder
+   * Any game can be finished by ID
+   * ID must be match otherwise throw error
+   *
+   * @param {number} gameId
+   */
   finishedGame(gameId: number) {
     this.updateGameStatus(gameId, GameStatus.FINISHED);
   }
@@ -70,6 +93,14 @@ class ScoreBoard implements ScoreBoard {
     return game.getGameStatus();
   }
 
+  /**
+   * Description placeholder
+   *  Updating score by id
+   *
+   * @param {UpdateScoreType} param.gameId number
+   * @param {UpdateScoreType} param.homeTeamScore number
+   * @param {UpdateScoreType} param.awayTeamScore number
+   */
   updateScore(score: UpdateScoreType) {
     const { gameId, homeTeamScore, awayTeamScore } = score;
     const game = this.findGameById(gameId);
@@ -89,18 +120,26 @@ class ScoreBoard implements ScoreBoard {
     game.addGameScore({ homeTeamScore, awayTeamScore });
   }
 
+  /**
+   * Description placeholder
+   * As per the requirement, First filter the data based on game status
+   * then sort as per highest total score, if score are same in that
+   * filter based on start time
+   * @returns {SummaryType}
+   */
+  // The matches with the same total score will be returned ordered by the most recently started match
   getSummary(): SummaryType {
     // filtering details which games are started
     const inProgressMatches = this.filterInProgressGames(GameStatus.STARTED);
 
     const sortBasedOnScore = inProgressMatches.sort((game1, game2) => {
       if (game2.getTotalScore() === game1.getTotalScore()) {
-        // once we have same total score for two matches then we need to check
-        // from each team of the match who has same score and become tie of match
+        // Filter based on start time if tole score is same.
         return game2.getStartTime().getTime() - game1.getStartTime().getTime();
       }
       return game2.getTotalScore() - game1.getTotalScore();
     });
+
     // try to make simple formate but we can enhance accordingly
     return sortBasedOnScore.map((game) => {
       return {
@@ -116,6 +155,6 @@ class ScoreBoard implements ScoreBoard {
     });
   }
 }
-// exporting type in case do we need to use while getting summery
+
 export { GameStatus, SummaryType };
 export default ScoreBoard;

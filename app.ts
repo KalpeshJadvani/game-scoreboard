@@ -1,5 +1,4 @@
 import { ScoreBoard } from './src';
-console.log('Start App');
 const board = new ScoreBoard();
 
 board.addGame({ gameId: 0, homeTeam: 'Mexico', awayTeam: 'Canada' });
@@ -22,7 +21,7 @@ board.startGame(4);
 
 // According above updated score & data
 
-// clint can update the score
+// Clint can update the score
 board.updateScore({ gameId: 0, homeTeamScore: 0, awayTeamScore: 5 });
 board.updateScore({ gameId: 1, homeTeamScore: 10, awayTeamScore: 2 });
 board.updateScore({ gameId: 2, homeTeamScore: 2, awayTeamScore: 2 });

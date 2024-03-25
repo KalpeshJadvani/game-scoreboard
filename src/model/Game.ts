@@ -14,7 +14,7 @@ export class Game {
     this.homeTeam = homeTeam;
     this.awayTeam = awayTeam;
     this.gameId = gameId;
-    // while initialize game default score o - o
+    // while initialize game, default score o - o
     this.homeTeamScore = 0;
     this.awayTeamScore = 0;
     this.gameStatus = GameStatus.NOT_STARTED;
